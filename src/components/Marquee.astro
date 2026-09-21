@@ -1,0 +1,105 @@
+---
+export interface MarqueeTextItem {
+	type: 'text';
+	label: string;
+}
+
+export interface MarqueeIconItem {
+	type: 'icon';
+	svg: string;
+	label?: string;
+}
+
+export type MarqueeItem = MarqueeTextItem | MarqueeIconItem;
+
+interface Props {
+	items: MarqueeItem[];
+	speed?: number;
+	count?: number;
+	cooldown?: number;
+}
+
+const { items, speed = 30, count = 24, cooldown = 5 } = Astro.props;
+
+// Elige al azar, pero penaliza a los items que salieron hace poco:
+// su probabilidad va subiendo de nuevo a medida que pasan `cooldown` turnos sin salir.
+function pickRandomWeighted<T>(input: T[], n: number, cooldown: number): T[] {
+	const lastUsedAt = new Array(input.length).fill(-Infinity);
+	const result: T[] = [];
+
+	for (let step = 0; step < n; step++) {
+		const weights = input.map((_, idx) => {
+			const sinceUsed = step - lastUsedAt[idx];
+			const recovered = Math.min(sinceUsed / cooldown, 1);
+			return Math.max(recovered, 0.08); // nunca llega a 0: sigue siendo posible repetir
+		});
+
+		const total = weights.reduce((sum, w) => sum + w, 0);
+		let roll = Math.random() * total;
+		let chosenIdx = weights.length - 1;
+		for (let idx = 0; idx < weights.length; idx++) {
+			roll -= weights[idx];
+			if (roll <= 0) {
+				chosenIdx = idx;
+				break;
+			}
+		}
+
+		result.push(input[chosenIdx]);
+		lastUsedAt[chosenIdx] = step;
+	}
+
+	return result;
+}
+
+const selected = pickRandomWeighted(items, count, cooldown);
+const track = [...selected, ...selected];
+---
+
+<div class="marquee overflow-hidden bg-accent whitespace-nowrap" style={`--marquee-duration: ${speed}s`}>
+	<div class="marquee-track inline-flex w-max items-center gap-4 py-2">
+		{track.map((item, i) => (
+			<>
+				{item.type === 'text' ? (
+					<span
+						class="font-mono text-xs font-medium uppercase tracking-wide text-background"
+						aria-hidden={i >= selected.length ? 'true' : undefined}
+					>
+						{item.label}
+					</span>
+				) : (
+					<span
+						class="inline-flex h-6 w-6 shrink-0 text-background [&_svg]:h-full [&_svg]:w-full"
+						aria-label={item.label}
+						aria-hidden={i >= selected.length ? 'true' : undefined}
+						set:html={item.svg}
+					/>
+				)}
+				<span class="font-mono text-xs font-medium text-background/60" aria-hidden="true">
+					//
+				</span>
+			</>
+		))}
+	</div>
+</div>
+
+<style>
+	.marquee-track {
+		animation: marquee-scroll var(--marquee-duration) linear infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.marquee-track {
+			animation: none;
+		}
+	}
+
+	@keyframes marquee-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+</style>

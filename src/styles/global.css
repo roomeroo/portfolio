@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@import "@fontsource/archivo/500.css";
+@import "@fontsource/archivo/700.css";
+@import "@fontsource/archivo/900.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/caveat/600.css";
+@import "@fontsource/caveat/700.css";
+
+@theme {
+  --color-background: #161513;
+  --color-accent: #D7FC40;
+  --color-text: #ffffff;
+  --color-text-secondary: #8A8580;
+
+  --font-display: 'Archivo', sans-serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-hand: 'Caveat', cursive;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+#cursor-dot,
+#cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+}
+
+html.custom-cursor #cursor-dot,
+html.custom-cursor #cursor-trail {
+  display: block;
+}
+
+#cursor-dot {
+  width: 18px;
+  height: 18px;
+  z-index: 200;
+  transition: scale 150ms ease-out;
+}
+
+#cursor-trail {
+  width: 34px;
+  height: 34px;
+  z-index: 199;
+  filter: blur(4px);
+  transition: scale 150ms ease-out;
+}
+
+html.cursor-hover #cursor-dot {
+  scale: 1.8;
+}
+
+html.cursor-hover #cursor-trail {
+  scale: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cursor-dot,
+  #cursor-trail {
+    transition: none;
+  }
+}

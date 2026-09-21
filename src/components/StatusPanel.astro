@@ -1,0 +1,14 @@
+---
+// Panel decorativo tipo terminal. Para eliminarlo: borrá el import y el
+// <StatusPanel /> de index.astro, y borrá este archivo. Nada más depende de esto.
+interface Props {
+	available?: boolean;
+}
+
+const { available = true } = Astro.props;
+---
+
+<div class="hidden rounded-md border border-accent/40 px-4 py-3 font-mono text-xs text-text-secondary lg:block">
+	<p class="text-accent">// status</p>
+	<p>disponible <span class="text-text">{available ? 'sí' : 'no'}</span></p>
+</div>

@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cursor from '../components/Cursor.astro';
+import Marquee from '../components/Marquee.astro';
+import StatusPanel from '../components/StatusPanel.astro';
+import { marqueeItems } from '../data/marqueeItems';
+import foto from '../assets/foto.jpg';
+---
+
+<BaseLayout title="Adrián Romero">
+	<!-- Introducción -->
+	<div
+		class="flex min-h-[calc(100dvh-4rem)] flex-col sm:min-h-[calc(100dvh-5rem)] md:min-h-[calc(100dvh-6rem)] lg:min-h-[calc(100dvh-7rem)]"
+	>
+		<header>
+
+			<!-- Top bar -->
+			<nav
+				class="flex flex-col gap-3 font-mono text-xs font-medium sm:flex-row sm:items-start sm:justify-between sm:text-sm"
+			>
+				<p class="text-text-secondary">
+					backend developer · málaga, españa
+				</p>
+
+				<div class="flex flex-col gap-2 sm:items-end">
+					<div class="flex items-center gap-2">
+						<p>¡No dudes en contactar conmigo!</p>
+
+						<span class="relative flex h-1.5 w-1.5">
+							<span
+								class="absolute inline-flex h-full w-full animate-ping rounded-full motion-reduce:animate-none bg-accent opacity-75"
+							></span>
+
+							<span
+								class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent"
+							></span>
+						</span>
+					</div>
+
+					<ul class="flex gap-3 text-text-secondary">
+						<li>
+							<a
+								href="mailto:adrian.romero.dev@gmail.com"
+								class="hover:text-text"
+							>
+								email
+							</a>
+						</li>
+
+						<li>
+							<a
+								href="https://www.linkedin.com/in/adrian-romero-maldonado/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="hover:text-text"
+							>
+								linkedin
+							</a>
+						</li>
+
+						<li>
+							<a
+								href="https://github.com/roomeroo"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="hover:text-text"
+							>
+								github
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<!-- Hero -->
+			<div class="relative mt-20 sm:mt-28 md:mt-36 lg:mt-44">
+
+				<p class="text-text-secondary">
+					hola, soy
+				</p>
+
+				<!-- Status -->
+				<div class="absolute right-0 top-0">
+					<StatusPanel />
+				</div>
+
+				<!-- Nombre -->
+				<div class="relative mt-2">
+
+					<h1
+						id="hero-name"
+						data-scramble="Adrián Romero"
+						class="font-display text-[length:min(14.5vw,3.75rem)] font-bold uppercase leading-[0.9] text-accent sm:text-7xl md:text-[length:min(10.5vw,6rem)] lg:text-[length:min(10.5vw,8rem)]"
+					>
+						Adrián Romero
+					</h1>
+
+					<!-- Foto -->
+					<figure
+						class="
+							relative
+							mt-8
+							w-24
+							-rotate-3
+
+							sm:w-28
+
+							md:absolute
+							md:bottom-0
+							md:left-[50vw]
+							md:ml-4
+							md:mt-0
+							md:w-32
+
+							lg:ml-6
+							lg:w-36
+						"
+					>
+						<Image
+							src={foto}
+							width={288}
+							height={288}
+							loading="eager"
+							class="aspect-square w-full rounded-md border-2 border-accent object-cover"
+							alt="Foto de Adrián Romero"
+						/>
+
+						<figcaption
+							class="absolute -top-7 right-0 w-max rotate-3 font-hand text-xl font-semibold text-accent"
+						>
+							soy yo, hola :)
+						</figcaption>
+					</figure>
+
+				</div>
+
+				<!-- Descripción -->
+				<p
+					class="mt-8 max-w-xl text-lg font-semibold sm:text-xl md:mt-10"
+				>
+					Creo software simple para resolver problemas complejos.
+				</p>
+
+			</div>
+		</header>
+
+		<div class="flex-1"></div>
+
+		<div class="-mx-6 sm:-mx-10 md:-mx-16 lg:-mx-24">
+			<Marquee items={marqueeItems} speed={40} />
+		</div>
+
+	</div>
+
+	<!-- Sobre mí -->
+	<div class="mt-16 sm:mt-20 md:mt-24 lg:mt-28">
+		<!-- Sobre mí -->
+	</div>
+
+	<Cursor />
+
+	<script>
+		import '../scripts/scramble';
+	</script>
+</BaseLayout>
